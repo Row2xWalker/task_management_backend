@@ -5,6 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
+const taskRoutes = require('./routes/taskRoutes');
+const { protect } = require('./middleware/authMiddleware');
 const errorHandler = require('./middleware/errorHandler')
 
 const app = express();
@@ -22,8 +24,11 @@ app.use(express.json())
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/tasks', protect, taskRoutes);
 
 // Health check endpoint
 app.get('/', (req, res) => res.send('API is running...'));
+
+app.use(errorHandler)
 
 module.exports = app;

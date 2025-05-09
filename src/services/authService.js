@@ -7,7 +7,7 @@ const signToken = (userId) =>
     expiresIn: process.env.JWT_EXPIRES_IN || '1d'
   });
 
-exports.register = async ({ name, email, password }) => {
+const register = async ({ name, email, password }) => {
   const existing = await User.findOne({ email });
   if (existing) throw new AppError('Email already in use', 400);
 
@@ -15,7 +15,7 @@ exports.register = async ({ name, email, password }) => {
   return { id: user._id, name: user.name, email: user.email };
 };
 
-exports.login = async ({ email, password }) => {
+const login = async ({ email, password }) => {
   const user = await User.findOne({ email }).select('+password');
   if (!user || !(await user.comparePassword(password))) {
     throw new AppError('Invalid email or password', 401);
@@ -27,3 +27,9 @@ exports.login = async ({ email, password }) => {
     user: { id: user._id, name: user.name, email: user.email }
   };
 };
+
+
+module.exports = {
+  register,
+  login
+}
