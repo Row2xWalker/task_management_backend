@@ -8,16 +8,33 @@ const register = catchAsync(async (req, res, next) => {
 });
 
 const login = catchAsync(async (req, res, next) => {
-  const { token, user } = await userService.login(req.body);
+  const { token, user } = await userService.login(req.body, res);
   res.status(200).json({ message: 'Login successful', token, user });
 });
 
 const logout = (req, res) => {
-  res.status(200).json({ message: 'Logout successful' });
+  if (!req.cookies.token) {
+    return res.status(400).json({ message: 'You are not logged in' });
+  }
+
+  // Clear the cookie
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 0,
+  });
+
+  res.status(200).json({ message: 'Logged out successfully' });
 };
+
+const me = catchAsync(async (req, res) => {
+  res.json({ user: req.user });
+});
 
 module.exports = {
   register,
   login,
-  logout
+  logout,
+  me
 }

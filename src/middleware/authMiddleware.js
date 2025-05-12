@@ -5,9 +5,9 @@ const AppError = require('../utils/appError');
 const protect = async (req, res, next) => {
   let token;
 
-  // Get token from header or cookie
-  if (req.headers.authorization?.startsWith('Bearer')) {
-    token = req.headers.authorization.split(' ')[1];
+  // Get token from cookie
+  if (req.cookies.token) {
+    token = req.cookies.token;
   }
 
   if (!token) {

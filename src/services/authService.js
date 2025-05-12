@@ -15,19 +15,28 @@ const register = async ({ name, email, password }) => {
   return { id: user._id, name: user.name, email: user.email };
 };
 
-const login = async ({ email, password }) => {
+const login = async ({ email, password }, res) => {
   const user = await User.findOne({ email }).select('+password');
+
   if (!user || !(await user.comparePassword(password))) {
     throw new AppError('Invalid email or password', 401);
   }
 
   const token = signToken(user._id);
+
+  // Set the token in an HTTP-only cookie
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: process.env.JWT_COOKIE_EXPIRES_IN * 1000,
+  });
+
   return {
     token,
-    user: { id: user._id, name: user.name, email: user.email }
+    user: { id: user._id, name: user.name, email: user.email },
   };
 };
-
 
 module.exports = {
   register,
