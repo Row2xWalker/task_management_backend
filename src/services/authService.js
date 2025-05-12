@@ -28,7 +28,7 @@ const login = async ({ email, password }, res) => {
   res.cookie('token', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
     maxAge: process.env.JWT_COOKIE_EXPIRES_IN * 1000,
   });
 
