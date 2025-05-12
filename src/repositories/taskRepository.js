@@ -8,6 +8,10 @@ const findTaskById = async (taskId) => {
   return await Task.findById(taskId);
 };
 
+const findTasksByUserId = async (user) => {
+  console.log(user)
+  return await Task.find({ user })
+};
 const findAllTasks = async () => {
   return await Task.find({});
 };
@@ -23,6 +27,7 @@ const deleteTaskById = async (taskId) => {
 module.exports = {
   createTask,
   findTaskById,
+  findTasksByUserId,
   findAllTasks,
   updateTaskById,
   deleteTaskById,

@@ -12,6 +12,13 @@ const getTaskById = catchAsync(async (req, res) => {
     res.json(task);
 });
 
+const getAllTasksByUserId = catchAsync(async (req, res) => {
+    const { userId } = req.params
+    const tasks = await taskService.getAllTasksByUserId(userId);
+    if (!tasks) return res.status(404).json({ error: 'No tasks for specific user' });
+    res.json(tasks);
+});
+
 const createNewTask = catchAsync(async (req, res) => {
     const taskData = {
         ...req.body,
@@ -37,6 +44,7 @@ const deleteTaskById = catchAsync(async (req, res) => {
 module.exports = {
     getAllTasks,
     getTaskById,
+    getAllTasksByUserId,
     createNewTask,
     updateTaskById,
     deleteTaskById
