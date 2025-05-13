@@ -20,13 +20,15 @@ This is the backend REST API for the Task Management application. Built with **N
 
 ```
 /src
-  /controllers   → Business logic
-  /models        → Mongoose schemas
-  /routes        → API route definitions
-  /middleware    → Auth & error handling
-  /utils         → Helper functions
-.env              → Environment variables
-server.js         → Entry point
+  /controllers – Handle HTTP requests and responses. Extract input, call services, return results or errors.
+  /services – Contain application/business logic. Process data, orchestrate workflows, and call repository methods.
+  /repository – Abstract database access. Perform direct interactions with Mongoose models (find, save, update, etc.).
+  /models – Define Mongoose schemas and models.
+  /routes – Define Express routes and map them to controller functions.
+  /middleware – Express middleware (e.g. auth, logging, error handlers).
+  /utils – Reusable utility functions
+.env - Environment variables
+server.js - entry point
 ```
 
 ## API Endpoints
